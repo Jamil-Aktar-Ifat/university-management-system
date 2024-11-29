@@ -7,41 +7,107 @@ import {
 } from './student.interface';
 
 const userNameSchema = new Schema<UserName>({
-  firstName: { type: String, required: true },
+  firstName: { type: String, required: [true, 'First name is required.'] },
   middleName: { type: String },
-  lastName: { type: String, required: true },
+  lastName: { type: String, required: [true, 'Last name is required.'] },
 });
 
 const guardianSchema = new Schema<Guardian>({
-  fatherName: { type: String, required: true },
-  fatherContactNo: { type: String, required: true },
-  fatherOccupation: { type: String, required: true },
-  motherName: { type: String, required: true },
-  motherContactNo: { type: String, required: true },
-  motherOccupation: { type: String, required: true },
+  fatherName: { type: String, required: [true, 'Father name is required.'] },
+  fatherContactNo: {
+    type: String,
+    required: [true, 'Father contact number is required.'],
+  },
+  fatherOccupation: {
+    type: String,
+    required: [true, 'Father occupation is required.'],
+  },
+  motherName: { type: String, required: [true, 'Mother name is required.'] },
+  motherContactNo: {
+    type: String,
+    required: [true, 'Mother contact number is required.'],
+  },
+  motherOccupation: {
+    type: String,
+    required: [true, 'Mother occupation is required.'],
+  },
 });
 
 const localGuardianSchema = new Schema<LocalGuardian>({
-  name: { type: String, required: true },
-  occupation: { type: String, required: true },
-  contactNo: { type: String, required: true },
+  name: { type: String, required: [true, 'Local guardian name is required.'] },
+  occupation: {
+    type: String,
+    required: [true, 'Local guardian occupation is required.'],
+  },
+  contactNo: {
+    type: String,
+    required: [true, 'Local guardian contact number is required.'],
+  },
 });
 
 const studentSchema = new Schema<Student>({
-  id: { type: String },
-  name: userNameSchema,
-  gender: ['male', 'female'],
-  dateOfBirth: { type: String },
-  email: { type: String, required: true },
-  contactNo: { type: String, required: true },
-  emergencyContactNo: { type: String, required: true },
-  bloodGroup: ['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'],
-  presentAddress: { type: String, required: true },
-  parmanentAddress: { type: String, required: true },
-  guardian: guardianSchema,
-  localGuardian: localGuardianSchema,
+  id: {
+    type: String,
+    required: [true, 'Student ID is required.'],
+    unique: true,
+  },
+  name: {
+    type: userNameSchema,
+    required: [true, 'Student name is required.'],
+  },
+  gender: {
+    type: String,
+    enum: {
+      values: ['male', 'female', 'other'],
+      message:
+        '{VALUE} is not a valid gender. Valid options are male, female, or other.',
+    },
+    required: [true, 'Gender is required.'],
+  },
+  dateOfBirth: { type: String, required: [true, 'Date of birth is required.'] },
+  email: {
+    type: String,
+    required: [true, 'Email address is required.'],
+    unique: true,
+  },
+  contactNo: { type: String, required: [true, 'Contact number is required.'] },
+  emergencyContactNo: {
+    type: String,
+    required: [true, 'Emergency contact number is required.'],
+  },
+  bloodGroup: {
+    type: String,
+    enum: {
+      values: ['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'],
+      message: '{VALUE} is not a valid blood group.',
+    },
+  },
+  presentAddress: {
+    type: String,
+    required: [true, 'Present address is required.'],
+  },
+  parmanentAddress: {
+    type: String,
+    required: [true, 'Permanent address is required.'],
+  },
+  guardian: {
+    type: guardianSchema,
+    required: [true, 'Guardian information is required.'],
+  },
+  localGuardian: {
+    type: localGuardianSchema,
+    required: [true, 'Local guardian information is required.'],
+  },
   profileImg: { type: String },
-  isActive: ['active', 'blocked'],
+  isActive: {
+    type: String,
+    enum: {
+      values: ['active', 'blocked'],
+      message:
+        '{VALUE} is not a valid status. Valid options are active or blocked.',
+    },
+    default: 'active',
+  },
 });
 
 export const StudentModel = model<Student>('Student', studentSchema);
