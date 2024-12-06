@@ -79,6 +79,7 @@ const studentValidationSchema = z.object({
       (value) => value !== undefined,
       '{VALUE} is not a valid status. Valid options are active or blocked.',
     ),
+  isDeleted: z.boolean(),
 });
 
 export default studentValidationSchema;

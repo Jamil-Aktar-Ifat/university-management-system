@@ -79,7 +79,6 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   password: {
     type: String,
     required: [true, 'Password is required'],
-    unique: true,
     minlength: [8, 'Password cannot be more than 8 chars'],
     maxlength: [20, 'Password cannot be more than 20 chars'],
   },
@@ -144,13 +143,17 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     },
     default: 'active',
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // ----------pre save middleware -------------: will work on create() or save() function
 studentSchema.pre('save', async function (next) {
   //   console.log(this, 'pre hook: we will save the data');
 
-  const user = this;
+  const user = this; //doc
   // hashing password and save into DB
   user.password = await bcrypt.hash(
     user.password,
@@ -160,8 +163,27 @@ studentSchema.pre('save', async function (next) {
 });
 
 // ------------post save middleware-------------
-studentSchema.post('save', function () {
-  console.log(this, 'post hook: we saved our data');
+studentSchema.post('save', function (doc, next) {
+  doc.password = '';
+  //   console.log(this, 'post hook: we saved our data');
+  next();
+});
+
+// Query Middleware
+
+studentSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+studentSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+studentSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
 });
 
 // ------------creating a custom custom static method------------
