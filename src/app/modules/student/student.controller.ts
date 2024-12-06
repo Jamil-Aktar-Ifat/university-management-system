@@ -19,9 +19,9 @@ const createStudent = async (req: Request, res: Response) => {
 
     // will call service function to send this data
     // const result = await StudentServices.createStudentIntoDB(value); // using joi
-    const result = await StudentServices.createStudentIntoDB(zodParsedData ); // using zod
+    const result = await StudentServices.createStudentIntoDB(zodParsedData); // using zod
 
-    // if (error) { 
+    // if (error) {
     //   res.status(500).json({
     //     success: false,
     //     message: 'Something went wrong!',
@@ -35,10 +35,10 @@ const createStudent = async (req: Request, res: Response) => {
       message: 'Student is created successfully!',
       data: result,
     });
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: 'Something went wrong!',
+      message: err.message || 'Something went wrong!',
       error: err,
     });
   }
