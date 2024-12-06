@@ -32,6 +32,7 @@ const localGuardianValidationSchema = z.object({
 
 const studentValidationSchema = z.object({
   id: z.string().nonempty('Student ID is required.'),
+  password: z.string().min(8).max(20),
   name: userNameValidationSchema.refine(
     (value) => value !== undefined,
     'Student name is required.',
@@ -40,7 +41,7 @@ const studentValidationSchema = z.object({
     .enum(['male', 'female', 'other'], {
       errorMap: () => ({
         message:
-          '{VALUE} is not a valid gender. Valid options are male, female, or other.',
+          '{VALUE} is not a valid gender. Valid options ar  male, female, or other.',
       }),
     })
     .refine((value) => value !== undefined, 'Gender is required.'),
