@@ -70,83 +70,101 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   },
 });
 
-const studentSchema = new Schema<TStudent, StudentModel>({
-  id: {
-    type: String,
-    required: [true, 'Student ID is required.'],
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-    minlength: [8, 'Password cannot be more than 8 chars'],
-    maxlength: [20, 'Password cannot be more than 20 chars'],
-  },
-  name: {
-    type: userNameSchema,
-    required: [true, 'Student name is required.'],
-  },
-  gender: {
-    type: String,
-    enum: {
-      values: ['male', 'female', 'other'],
-      message:
-        '{VALUE} is not a valid gender. Valid options are male, female, or other.',
+const studentSchema = new Schema<TStudent, StudentModel>(
+  {
+    id: {
+      type: String,
+      required: [true, 'Student ID is required.'],
+      unique: true,
     },
-    required: [true, 'Gender is required.'],
-  },
-  dateOfBirth: { type: String, required: [true, 'Date of birth is required.'] },
-  email: {
-    type: String,
-    required: [true, 'Email address is required.'],
-    unique: true,
-    validate: {
-      validator: (value: string) => validator.isEmail(value),
-      message: '{VALUE} is not a valid type',
+    password: {
+      type: String,
+      required: [true, 'Password is required'],
+      minlength: [8, 'Password cannot be more than 8 chars'],
+      maxlength: [20, 'Password cannot be more than 20 chars'],
+    },
+    name: {
+      type: userNameSchema,
+      required: [true, 'Student name is required.'],
+    },
+    gender: {
+      type: String,
+      enum: {
+        values: ['male', 'female', 'other'],
+        message:
+          '{VALUE} is not a valid gender. Valid options are male, female, or other.',
+      },
+      required: [true, 'Gender is required.'],
+    },
+    dateOfBirth: {
+      type: String,
+      required: [true, 'Date of birth is required.'],
+    },
+    email: {
+      type: String,
+      required: [true, 'Email address is required.'],
+      unique: true,
+      validate: {
+        validator: (value: string) => validator.isEmail(value),
+        message: '{VALUE} is not a valid type',
+      },
+    },
+    contactNo: {
+      type: String,
+      required: [true, 'Contact number is required.'],
+    },
+    emergencyContactNo: {
+      type: String,
+      required: [true, 'Emergency contact number is required.'],
+    },
+    bloodGroup: {
+      type: String,
+      enum: {
+        values: ['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'],
+        message: '{VALUE} is not a valid blood group.',
+      },
+    },
+    presentAddress: {
+      type: String,
+      required: [true, 'Present address is required.'],
+    },
+    parmanentAddress: {
+      type: String,
+      required: [true, 'Permanent address is required.'],
+    },
+    guardian: {
+      type: guardianSchema,
+      required: [true, 'Guardian information is required.'],
+    },
+    localGuardian: {
+      type: localGuardianSchema,
+      required: [true, 'Local guardian information is required.'],
+    },
+    profileImg: { type: String },
+    isActive: {
+      type: String,
+      enum: {
+        values: ['active', 'blocked'],
+        message:
+          '{VALUE} is not a valid status. Valid options are active or blocked.',
+      },
+      default: 'active',
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
-  contactNo: { type: String, required: [true, 'Contact number is required.'] },
-  emergencyContactNo: {
-    type: String,
-    required: [true, 'Emergency contact number is required.'],
-  },
-  bloodGroup: {
-    type: String,
-    enum: {
-      values: ['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'],
-      message: '{VALUE} is not a valid blood group.',
+  {
+    toJSON: {
+      virtuals: true,
     },
   },
-  presentAddress: {
-    type: String,
-    required: [true, 'Present address is required.'],
-  },
-  parmanentAddress: {
-    type: String,
-    required: [true, 'Permanent address is required.'],
-  },
-  guardian: {
-    type: guardianSchema,
-    required: [true, 'Guardian information is required.'],
-  },
-  localGuardian: {
-    type: localGuardianSchema,
-    required: [true, 'Local guardian information is required.'],
-  },
-  profileImg: { type: String },
-  isActive: {
-    type: String,
-    enum: {
-      values: ['active', 'blocked'],
-      message:
-        '{VALUE} is not a valid status. Valid options are active or blocked.',
-    },
-    default: 'active',
-  },
-  isDeleted: {
-    type: Boolean,
-    default: false,
-  },
+);
+
+// mongoose virtual
+studentSchema.virtual('fullName').get(function () {
+  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
 
 // ----------pre save middleware -------------: will work on create() or save() function
