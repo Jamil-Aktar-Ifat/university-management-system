@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import config from './app/config';
+import { UserRoutes } from './app/modules/user/user.route';
 
 const express = require('express');
 const cors = require('cors');
@@ -11,7 +12,8 @@ app.use(express.json());
 app.use(cors());
 
 // application routes
-app.use('/api/v1/students', StudentRoutes);
+// app.use('/api/v1/students', StudentRoutes);
+app.use('/api/v1/users', UserRoutes);
 
 const getAController = (req: Request, res: Response) => {
   const a = 10;
