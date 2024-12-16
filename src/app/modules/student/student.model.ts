@@ -4,12 +4,9 @@ import {
   TGuardian,
   TLocalGuardian,
   TStudent,
-  //   StudentMethods,
   StudentModel,
   TUserName,
 } from './student.interface';
-import bcrypt from 'bcrypt';
-import config from '../../config';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -82,12 +79,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'User id is required'],
       unique: true,
       ref: 'User',
-    },
-    password: {
-      type: String,
-      required: [true, 'Password is required'],
-      minlength: [8, 'Password cannot be more than 8 chars'],
-      maxlength: [20, 'Password cannot be more than 20 chars'],
     },
     name: {
       type: userNameSchema,
@@ -164,25 +155,7 @@ studentSchema.virtual('fullName').get(function () {
   return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
 
-// ----------pre save middleware -------------: will work on create() or save() function
-studentSchema.pre('save', async function (next) {
-  //   console.log(this, 'pre hook: we will save the data');
 
-  const user = this; //doc
-  // hashing password and save into DB
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bcrypt_salt_rounds),
-  );
-  next();
-});
-
-// ------------post save middleware-------------
-studentSchema.post('save', function (doc, next) {
-  doc.password = '';
-  //   console.log(this, 'post hook: we saved our data');
-  next();
-});
 
 // Query Middleware
 
@@ -207,11 +180,5 @@ studentSchema.statics.isUserExists = async function (id: string) {
   return existingUser;
 };
 
-// ------------creating a custom instance method------------
-
-// studentSchema.methods.isUserExists = async function (id: string) {
-//   const existingUser = await Student.findOne({ id });
-//   return existingUser;
-// };
 
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);

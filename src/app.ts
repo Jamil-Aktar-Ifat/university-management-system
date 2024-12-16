@@ -1,6 +1,7 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import config from './app/config';
 import { UserRoutes } from './app/modules/user/user.route';
+import globalErrorHandlers from './app/middlewares/globalErrorHanlders';
 
 const express = require('express');
 const cors = require('cors');
@@ -22,4 +23,8 @@ const getAController = (req: Request, res: Response) => {
 };
 
 app.get('/', getAController);
+
+// global error handler
+app.use(globalErrorHandlers);
+
 export default app;
