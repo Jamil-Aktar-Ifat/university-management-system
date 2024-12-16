@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import config from './app/config';
 import { UserRoutes } from './app/modules/user/user.route';
 import globalErrorHandlers from './app/middlewares/globalErrorHanlders';
+import notFound from './app/middlewares/notFound';
 
 const express = require('express');
 const cors = require('cors');
@@ -26,5 +27,8 @@ app.get('/', getAController);
 
 // global error handler
 app.use(globalErrorHandlers);
+
+// not found handler
+app.use(notFound);
 
 export default app;
