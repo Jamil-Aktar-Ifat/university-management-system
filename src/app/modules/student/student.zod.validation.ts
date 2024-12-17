@@ -30,56 +30,36 @@ const localGuardianValidationSchema = z.object({
   contactNo: z.string().nonempty('Local guardian contact number is required.'),
 });
 
-const studentValidationSchema = z.object({
-  id: z.string().nonempty('Student ID is required.'),
-  password: z.string().min(8).max(20),
-  name: userNameValidationSchema.refine(
-    (value) => value !== undefined,
-    'Student name is required.',
-  ),
-  gender: z
-    .enum(['male', 'female', 'other'], {
-      errorMap: () => ({
-        message:
-          '{VALUE} is not a valid gender. Valid options ar  male, female, or other.',
-      }),
-    })
-    .refine((value) => value !== undefined, 'Gender is required.'),
-  dateOfBirth: z.string().nonempty('Date of birth is required.'),
-  email: z
-    .string()
-    .email('{VALUE} is not a valid type')
-    .nonempty('Email address is required.'),
-  contactNo: z.string().nonempty('Contact number is required.'),
-  emergencyContactNo: z
-    .string()
-    .nonempty('Emergency contact number is required.'),
-  bloodGroup: z
-    .enum(['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'])
-    .optional()
-    .refine(
-      (value) => value !== undefined,
-      '{VALUE} is not a valid blood group.',
-    ),
-  presentAddress: z.string().nonempty('Present address is required.'),
-  parmanentAddress: z.string().nonempty('Permanent address is required.'),
-  guardian: guardianValidationSchema.refine(
-    (value) => value !== undefined,
-    'Guardian information is required.',
-  ),
-  localGuardian: localGuardianValidationSchema.refine(
-    (value) => value !== undefined,
-    'Local guardian information is required.',
-  ),
-  profileImg: z.string().optional(),
-  isActive: z
-    .enum(['active', 'blocked'])
-    .default('active')
-    .refine(
-      (value) => value !== undefined,
-      '{VALUE} is not a valid status. Valid options are active or blocked.',
-    ),
-  isDeleted: z.boolean(),
+const createStudentValidationSchema = z.object({
+  body: z.object({
+    student: z.object({
+      password: z.string(),
+      name: userNameValidationSchema.refine(
+        (value) => value !== undefined,
+        'Student name is required.',
+      ),
+      gender: z
+        .enum(['male', 'female', 'other'], {
+          errorMap: () => ({
+            message:
+              '{VALUE} is not a valid gender. Valid options ar  male, female, or other.',
+          }),
+        })
+        .refine((value) => value !== undefined, 'Gender is required.'),
+      dateOfBirth: z.string(),
+      email: z.string().email('{VALUE} is not a valid type'),
+      contactNo: z.string(),
+      emergencyContactNo: z.string(),
+      bloodGroup: z.enum(['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-']),
+      presentAddress: z.string(),
+      parmanentAddress: z.string(),
+      guardian: guardianValidationSchema,
+      localGuardian: localGuardianValidationSchema,
+      profileImg: z.string().optional(),
+    }),
+  }),
 });
 
-export default studentValidationSchema;
+export const studentValidations = {
+  createStudentValidationSchema
+};

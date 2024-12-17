@@ -1,13 +1,15 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { UserControllers } from './user.controller';
+import { AnyZodObject } from 'zod';
+import { studentValidations } from '../student/student.zod.validation';
+import validateRequest from '../../middlewares/validateRequest';
 
 const router = express.Router();
 
-const middlewareArmy = (req: Request, res: Response, next: NextFunction) => {
-  console.log('This is Army!');
-  next();
-};
-
-router.post('/create-student', middlewareArmy, UserControllers.createStudent);
+router.post(
+  '/create-student',
+  validateRequest(studentValidations.createStudentValidationSchema),
+  UserControllers.createStudent,
+);
 
 export const UserRoutes = router;
