@@ -7,6 +7,7 @@ import {
   StudentModel,
   TUserName,
 } from './student.interface';
+import { date } from 'joi';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -94,7 +95,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'Gender is required.'],
     },
     dateOfBirth: {
-      type: String,
+      type: date,
       required: [true, 'Date of birth is required.'],
     },
     email: {
