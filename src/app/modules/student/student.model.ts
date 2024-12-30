@@ -7,7 +7,6 @@ import {
   StudentModel,
   TUserName,
 } from './student.interface';
-import { date } from 'joi';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -139,6 +138,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'Local guardian information is required.'],
     },
     profileImg: { type: String },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicSemester',
+    },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -155,8 +158,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
 studentSchema.virtual('fullName').get(function () {
   return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
-
-
 
 // Query Middleware
 
@@ -180,6 +181,5 @@ studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id });
   return existingUser;
 };
-
 
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);
