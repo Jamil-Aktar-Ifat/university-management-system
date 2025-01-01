@@ -46,7 +46,7 @@ const createStudentValidationSchema = z.object({
           }),
         })
         .refine((value) => value !== undefined, 'Gender is required.'),
-      dateOfBirth: z.date().optional(),
+      dateOfBirth: z.string().optional(),
       email: z.string().email('{VALUE} is not a valid type'),
       contactNo: z.string(),
       emergencyContactNo: z.string(),
