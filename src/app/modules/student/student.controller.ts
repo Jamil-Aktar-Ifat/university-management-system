@@ -20,7 +20,7 @@ const getAllStudents = catchAsync(async (req, res, next) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Student is created successfully!',
+    message: 'Students are retrieved successfully!',
     data: result,
   });
 });
@@ -31,7 +31,7 @@ const deleteStudent = catchAsync(async (req, res, next) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Student is created successfully!',
+    message: 'Student is deleted successfully!',
     data: result,
   });
 });

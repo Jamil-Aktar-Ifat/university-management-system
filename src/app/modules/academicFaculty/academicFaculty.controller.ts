@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express';
+import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import { AcademicFacultyServices } from './academicFaculty.service';
 import sendResponse from '../../utils/sendResponse';
@@ -59,7 +60,7 @@ const updateAcademicFaculty = catchAsync(async (req, res) => {
 
 export const AcademicFacultyControllers = {
   createAcademicFaculty,
-  getAllAcademicFaculties ,
+  getAllAcademicFaculties,
   getSingleAcademicFaculty,
   updateAcademicFaculty,
 };
