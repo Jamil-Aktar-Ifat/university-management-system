@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import config from './app/config';
-import globalErrorHandlers from './app/middlewares/globalErrorHanlders';
 import notFound from './app/middlewares/notFound';
 import router from './app/routes';
+import globalErrorHandlers from './app/middlewares/globalErrorHanlders';
 
 const express = require('express');
 const cors = require('cors');

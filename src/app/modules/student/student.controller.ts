@@ -10,7 +10,7 @@ const getSingleStudent = catchAsync(async (req, res, next) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Student is created successfully!',
+    message: 'Student is retrieved   successfully!',
     data: result,
   });
 });
